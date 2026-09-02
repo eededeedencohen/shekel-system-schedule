@@ -124,7 +124,7 @@ function MiluimBlock({ inMiluim }) {
       {inMiluim && <span className="here-badge">אתה נמצא כאן</span>}
       <div className="miluim-icon"><Icon name="shield" /></div>
       <div>
-        <h2>דצמבר 2026 – ינואר 2027 · שירות מילואים</h2>
+        <h2>דצמבר 2026 - ינואר 2027 · שירות מילואים</h2>
         <p>
           המערכת קפואה בגרסה יציבה ומנוטרת (Git Tag: v1.0.0-web-complete).
           כל ה-Backend וממשקי ה-Web מתועדים, מגובים וממתינים.
@@ -235,20 +235,20 @@ export default function App() {
   const pct = totalCount ? Math.round((doneCount / totalCount) * 100) : 0;
 
   const statusText = useMemo(() => {
-    if (inMiluim) return 'תקופת מילואים — המערכת קפואה בגרסה יציבה. חוזרים לפיתוח ב-1.2.2027.';
-    if (today.getDay() > 4) return 'סוף שבוע — אין משימות מתוכננות להיום.';
+    if (inMiluim) return 'תקופת מילואים - המערכת קפואה בגרסה יציבה. חוזרים לפיתוח ב-1.2.2027.';
+    if (today.getDay() > 4) return 'סוף שבוע - אין משימות מתוכננות להיום.';
     for (const mo of MONTHS) {
       if (mo.miluim) continue;
       if (mo.y === today.getFullYear() && mo.m === today.getMonth()) {
         const entry = mo.days[today.getDate()];
         if (!entry) return 'אין משימה מתוכננת להיום.';
-        if (entry[0] === 'holiday') return `${entry[1]} — יום חופש, אין משימות.`;
+        if (entry[0] === 'holiday') return `${entry[1]} - יום חופש, אין משימות.`;
         return `המשימה של היום: ${entry[1]}`;
       }
     }
     return today < new Date(2026, 8, 1)
       ? 'התוכנית מתחילה ב-1 בספטמבר 2026.'
-      : 'התוכנית הסתיימה — המערכת באוויר.';
+      : 'התוכנית הסתיימה - המערכת באוויר.';
   }, [today, inMiluim]);
 
   const currentSectionId = useMemo(() => {
@@ -287,7 +287,7 @@ export default function App() {
             <div>
               <h1>מערכת ניהול שק"ל · תוכנית עבודה מלאה</h1>
               <div className="header-sub">
-                ספטמבר 2026 – מרץ 2027 · אפיון ← פיתוח Web ← מילואים ← מובייל ← השקה
+                ספטמבר 2026 - מרץ 2027 · אפיון ← פיתוח Web ← מילואים ← מובייל ← השקה
               </div>
             </div>
             <div className="today-box">
@@ -317,7 +317,7 @@ export default function App() {
                   className={`nav-pill${inMiluim ? ' current' : ''}`}
                   onClick={() => scrollTo('sec-miluim')}
                 >
-                  מילואים · דצמ׳–ינו׳
+                  מילואים · דצמ׳ - ינו׳
                 </button>
               );
             }

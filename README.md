@@ -1,6 +1,6 @@
 # shekel-system-schedule
 
-לוז פרויקט מערכת ניהול שק"ל — React + Vite.
+לוז פרויקט מערכת ניהול שק"ל - React + Vite.
 
 **Live:** https://eededeedencohen.github.io/shekel-system-schedule/
 

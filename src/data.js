@@ -24,7 +24,7 @@ function icon(name) {
 }
 
 /* ============================================================
-   Categories — subtle backgrounds per task focus
+   Categories - subtle backgrounds per task focus
    ============================================================ */
 const CATS = {
   social:   { label: 'עו"ס',            icon: 'heart',     bg: '#fdf2f7', border: '#f3d3e2', accent: '#a83a6d' },
@@ -50,7 +50,7 @@ const MONTHS = [
   {
     y: 2026, m: 8, name: 'ספטמבר 2026',
     phase: 'שלב 1 · אפיון וארכיטקטורה',
-    sub: 'ERD, תרשימי זרימה, חוזי API ו-Wireframes — סגירת PRD מלא עד סוכות',
+    sub: 'ERD, תרשימי זרימה, חוזי API ו-Wireframes - סגירת PRD מלא עד סוכות',
     days: {
       1:  ['college', 'מכללה לכל: התחלת ERD ו-Class Diagram ראשוני'],
       2:  ['college', 'סגירת ERD מכללה + מודל משתמשים והרשאות (RBAC)'],
@@ -78,8 +78,8 @@ const MONTHS = [
   },
   {
     y: 2026, m: 9, name: 'אוקטובר 2026',
-    phase: 'שלב 2 · פיתוח Backend + Web — מודולי ליבה',
-    sub: 'עו"ס, ספרייה, חדר כושר ומכללה לכל — פיתוח Fullstack מלא',
+    phase: 'שלב 2 · פיתוח Backend + Web - מודולי ליבה',
+    sub: 'עו"ס, ספרייה, חדר כושר ומכללה לכל - פיתוח Fullstack מלא',
     days: {
       1:  ['holiday', 'חול המועד סוכות'],
       4:  ['social',  'מערכת קליטת עו"ס (Backend): תיק סטודנט טיפולי'],
@@ -99,7 +99,7 @@ const MONTHS = [
       22: ['college', 'מכללה לכל: מעקב דיווחי נוכחות שיעורים'],
       25: ['college', 'מכללה לכל (React): ממשק אישור חשבוניות מורים'],
       26: ['infra',   'ליטושי UI ו-State Management (Zustand/Redux)'],
-      27: ['holiday', 'יום שבתון — בחירות לכנסת'],
+      27: ['holiday', 'יום שבתון - בחירות לכנסת'],
       28: ['qa',      'בדיקות שרת ותיקוני באגים רוחביים'],
       29: ['special', 'Buffer Day: סגירת קצוות וייצוב (Code Freeze Phase 1)']
     }
@@ -137,7 +137,7 @@ const MONTHS = [
   {
     y: 2027, m: 1, name: 'פברואר 2027',
     phase: 'שלב 4 · אפליקציית מובייל (React Native)',
-    sub: 'חזרה מהמילואים — פיתוח אפליקציית הסטודנטים מאפס עד גרסת אלפא',
+    sub: 'חזרה מהמילואים - פיתוח אפליקציית הסטודנטים מאפס עד גרסת אלפא',
     days: {
       1:  ['mobile',  'התאפסות, Setup פרויקט RN, Navigation וחיבור API'],
       2:  ['mobile',  'תשתית Auth & Secure Storage (הזדהות, Auto-Login)'],
@@ -186,7 +186,7 @@ const MONTHS = [
       24: ['holiday', 'שושן פורים'],
       25: ['qa',      'Smoke Tests ב-Production ובדיקת חנויות האפליקציות'],
       28: ['launch',  'הדרכות משתמשים: רכזים, עו"ס, הנה"ח ומורים'],
-      29: ['launch',  'פיילוט שקט — הפצה מבוקרת לקבוצה ראשונה'],
+      29: ['launch',  'פיילוט שקט - הפצה מבוקרת לקבוצה ראשונה'],
       30: ['launch',  'עלייה רשמית מלאה לאוויר! (Production Launch)'],
       31: ['launch',  'ניטור, Uptime Tracking וליווי צוות שק"ל']
     }
@@ -236,7 +236,7 @@ const DETAILS = {
   '2026-10-25': { d: ["מסך ניהול חשבוניות שהגישו מורים.","השוואה ויזואלית: חשבונית מול שיעורים.","אישור תשלום או החזרה לתיקון."], c: ["קריאת חשבוניות ממתינות.","תצוגת Side-by-Side: חשבונית מול שיעורים.","'אשר'/'דחה' עם סיבה למורה."], t: "React Split View, PDF viewer, Axios PATCH requests." },
   '2026-10-26': { d: ["ניהול State רוחבי (מי מחובר? תפקיד?).","ליטושי Tailwind ושפה עיצובית אחידה.","Loading spinners ו-Error states."], c: ["Zustand או Redux Toolkit לפרטי המשתמש.","Protected Routes ב-React Router.","Skeleton Loaders בכל המסכים."], t: "Zustand / Redux, React Router v6, Tailwind CSS UI polish." },
   '2026-10-28': { d: ["סבב QA עצמי על כל מודולי החודש.","מקרי קיצון ב-Backend (נתונים ריקים, שגיאות DB).","תיקון באגים שהתגלו."], c: ["תרחישים ב-Postman לעמידות ה-API.","זרימה מלאה: קליטה -> סטודנט -> ספר -> חוג.","קריאת שגיאות בקונסול של React."], t: "Postman API Tests, React Developer Tools." },
-  '2026-10-29': { d: ["טיפול במשימות שגלשו החודש.","Refactoring והסרת Dead code.","דחיפה ל-Staging / גיבוי Git יציב."], c: ["כל הקוד תחת Git.","Code Review עצמי וניקוי console.log.","הקפאת מודולי אוקטובר — עוברים לנובמבר."], t: "Git Commit, Push, ESLint/Prettier format check." },
+  '2026-10-29': { d: ["טיפול במשימות שגלשו החודש.","Refactoring והסרת Dead code.","דחיפה ל-Staging / גיבוי Git יציב."], c: ["כל הקוד תחת Git.","Code Review עצמי וניקוי console.log.","הקפאת מודולי אוקטובר - עוברים לנובמבר."], t: "Git Commit, Push, ESLint/Prettier format check." },
 
   /* ---------------- נובמבר 2026 ---------------- */
   '2026-11-01': { d: ["ממשק כניסה ייעודי למורים עם ניתוב לפורטל.","מערכת שעות שבועית של המורה המחובר בלבד.","חיווי סטטוס שיעור: דווח / ממתין / עתידי."], c: ["קומפוננטת TeacherScheduleView.","GET /api/teacher/schedule מסונן לפי JWT.","התאמה מלאה למובייל (Mobile-responsive)."], t: "React, Tailwind CSS (Mobile-first), JWT Auth Context." },
@@ -269,10 +269,10 @@ const DETAILS = {
   '2027-02-04': { d: ["טאב תרבות: יציאות החודש ככרטיסיות עשירות.","פרטי יציאה: תמונה, יעד, תאריך, מונה מקומות.","סינון: פתוח / אזלו מקומות / עברו."], c: ["GET /api/culture/events.","EventCard עם תגית סטטוס צבעונית.","FlatList עם keyExtractor ו-initialNumToRender."], t: "FlatList, StyleSheet flexbox, FastImage caching." },
   '2027-02-07': { d: ["'הרשם עכשיו' / 'בטל רישום' על כל כרטיסייה.","Optimistic UI לתחושת מהירות.","חסימת הרשמה בתפוסה מלאה."], c: ["POST /events/:id/register + ביטול.","Haptic Feedback בלחיצה מוצלחת.","חלון אישור לפני ביטול הרשמה."], t: "React Native Haptics, Optimistic State updates, Vibration API." },
   '2027-02-08': { d: ["מסך 'היציאות שאליהן נרשמתי'.","לשונית היסטוריית פעילויות.","'הוסף ליומן הטלפון' לאירועים עתידיים."], c: ["Top Tab Bar לסינון עתידי/היסטוריה.","react-native-calendar-events לסנכרון ליומן.","Empty State מעוצב ללא הרשמות."], t: "SegmentedControl / Animated Tabs, Empty State Illustrations." },
-  '2027-02-09': { d: ["טאב מערכת שעות שבועי (מוזיקה, אומנות...).","Day Selector למעבר בין ראשון–חמישי.","פרטי שיעור: קורס, שעות, כיתה, מורה."], c: ["GET /api/student/schedule.","DaySelector אופקי (Horizontal ScrollView).","צבע ייחודי לכל מקצוע/חוג."], t: "Horizontal ScrollView, Date-fns, Conditional Rendering." },
+  '2027-02-09': { d: ["טאב מערכת שעות שבועי (מוזיקה, אומנות...).","Day Selector למעבר בין ראשון - חמישי.","פרטי שיעור: קורס, שעות, כיתה, מורה."], c: ["GET /api/student/schedule.","DaySelector אופקי (Horizontal ScrollView).","צבע ייחודי לכל מקצוע/חוג."], t: "Horizontal ScrollView, Date-fns, Conditional Rendering." },
   '2027-02-10': { d: ["חוגי הוסטל בלוח של דיירי הוסטל.","תגית מבדלת: שיעור מכללה מול פעילות הוסטל.","באנר עדכוני שינויים מהרכז."], c: ["מיזוג פעילויות הוסטל ללו\"ז השבועי.","דייר לא משויך לא רואה חוגי הוסטל.","Pop-up על שינוי שעה שהוזן בווב."], t: "Array merging & sorting by timestamp, Role/Branch filtering." },
   '2027-02-11': { d: ["מסך טופס הטבת כושר לסטודנט.","הצהרת בריאות אינטראקטיבית + תקנון.","ולידציית שדות לפני מעבר לחתימה."], c: ["GymFormScreen עם קלט מותאם למגע.","Auto-fill פרטי הסטודנט הידועים.","חסימה ללא אישור כל הסעיפים."], t: "React Hook Form / Formik, Custom Checkbox & Radio components." },
-  '2027-02-14': { d: ["Signature Canvas — חתימה באצבע על המסך.","המרה ל-Base64 ושליחה (POST /api/gym/submit).","מסך מעקב: 'ממתין לאישור' / 'מאושר'."], c: ["react-native-signature-canvas.","'נקה חתימה' ו'אשר ושלח'.","כרטיסיית סטטוס ירוקה עם תוקף בפרופיל."], t: "react-native-signature-canvas, Base64 payload, Submission loader." },
+  '2027-02-14': { d: ["Signature Canvas - חתימה באצבע על המסך.","המרה ל-Base64 ושליחה (POST /api/gym/submit).","מסך מעקב: 'ממתין לאישור' / 'מאושר'."], c: ["react-native-signature-canvas.","'נקה חתימה' ו'אשר ושלח'.","כרטיסיית סטטוס ירוקה עם תוקף בפרופיל."], t: "react-native-signature-canvas, Base64 payload, Submission loader." },
   '2027-02-15': { d: ["חיפוש בקטלוג לפי שם/סופר + זמינות.","'הספרים המושאלים שלי'.","חיווי תאריך החזרה (ירוק/אדום)."], c: ["GET /api/student/borrowed-books.","Search Bar מהיר לקטלוג.","התראה מקומית 48 שעות לפני מועד החזרה."], t: "Search TextInput, Debounce search hook, Date comparison badge." },
   '2027-02-16': { d: ["אינטגרציית Push מלאה (FCM / Expo).","בקשת הרשאה ושמירת Device Token בשרת.","Foreground / Background / Killed state."], c: ["@react-native-firebase/messaging או expo-notifications.","POST /api/student/push-token בהתחברות.","Deep Linking: התראה פותחת את פרטי היציאה."], t: "FCM / APNs, Push Token Registration, Deep Linking configuration." },
   '2027-02-17': { d: ["Cache מקומי ללו\"ז ולמסך הבית (AsyncStorage/MMKV).","באנר 'פועל במצב לא מקוון'.","הודעות שגיאה ידידותיות."], c: ["@react-native-community/netinfo.","Stale-While-Revalidate מה-Storage.","Error Boundary ייעודי."], t: "AsyncStorage, NetInfo, Offline Caching patterns." },
@@ -292,19 +292,19 @@ const DETAILS = {
   '2027-03-07': { d: ["תיקון הריג'קטים מ-3 ימי ה-E2E.","בעיות סנכרון מובייל-ווב.","תיקוני עיצוב ושבירות טקסט בעברית."], c: ["סגירה לפי עדיפויות (Critical -> High -> Medium).","תיקון Type errors ושדות undefined.","רגרסיה מהירה על מסכי המובייל."], t: "Bug triage, Hotfix branching, Chrome DevTools & Flipper." },
   '2027-03-08': { d: ["מערכת יציבה ללא Blockers.","אופטימיזציית קריאות שרת בדשבורד.","הכנה ל-UAT עם צוות שק\"ל."], c: ["איפוס נתונים + Dummy Data ריאליסטי.","משתמשי בדיקה לכל תפקיד.","דפי הנחיה (Cheat Sheets) לבודקים."], t: "Database seeding, DB cleanup scripts, UAT staging preparation." },
   '2027-03-09': { d: ["UAT חי עם רכזים, מנהל מכללה ועו\"ס.","המשתמשים מבצעים פעולות שגרתיות לבד.","זיהוי נקודות חיכוך וקשיי הבנה."], c: ["עו\"ס: 'בצעי קליטה והעלי טופס סל שיקום'.","רכז תרבות: 'הקם לו\"ז ופרסם למובייל'.","מנהל: 'שבץ מורה ובדוק חשבונית'.","רישום כל הערה וקושי."], t: "User Acceptance Testing, UX observation log, Feedback recording." },
-  '2027-03-10': { d: ["מובייל מול 2–3 סטודנטים לדוגמה.","פורטל מורים מול מורה אמיתי.","נגישות ובהירות שפה לסטודנטים."], c: ["חוויית החתימה באצבע ברורה?","דיווח מורה בפחות מ-60 שניות?","משוב על גופנים, צבעים והודעות."], t: "Field testing, Student accessibility evaluation, Usability testing." },
+  '2027-03-10': { d: ["מובייל מול - סטודנטים לדוגמה.","פורטל מורים מול מורה אמיתי.","נגישות ובהירות שפה לסטודנטים."], c: ["חוויית החתימה באצבע ברורה?","דיווח מורה בפחות מ-60 שניות?","משוב על גופנים, צבעים והודעות."], t: "Field testing, Student accessibility evaluation, Usability testing." },
   '2027-03-11': { d: ["איחוד וניתוח כל המשובים מה-UAT.","סינון: Must have מול Nice to have.","רשימת תיקונים חדה לשבוע הבא."], c: ["כרטיסי תיקון עם צילומי מסך.","אישור רשימה מול מובילי הצוות.","הקצאת זמנים ליומיים הקרובים."], t: "Sprint backlog prioritization, Scope control, Action items." },
   '2027-03-14': { d: ["יישום תיקוני ה-UAT שאושרו.","חידוד ניסוחים (Micro-copy).","הגדלת כפתורים ושיפור ניגודיות."], c: ["שמות שדות קריאים + Placeholders.","אנימציות הצלחה (Checkmark).","תיקון שדות שגיאה בווב ובמובייל."], t: "Micro-copy polish, Tailwind refinements, RN Animated micro-interactions." },
-  '2027-03-15': { d: ["סגירת כל כרטיסי ה-UAT.","הדגמה וקבלת Sign-off לעלייה לאוויר.","נעילה פונקציונלית — עוברים לתשתיות."], c: ["אישור רשמי ממובילי התוכניות.","Sanity check על המודולים שתוקנו.","Hard Code Freeze — אין פיצ'רים חדשים."], t: "Feature Freeze, UAT Sign-off protocol, Release candidate tagging." },
+  '2027-03-15': { d: ["סגירת כל כרטיסי ה-UAT.","הדגמה וקבלת Sign-off לעלייה לאוויר.","נעילה פונקציונלית - עוברים לתשתיות."], c: ["אישור רשמי ממובילי התוכניות.","Sanity check על המודולים שתוקנו.","Hard Code Freeze - אין פיצ'רים חדשים."], t: "Feature Freeze, UAT Sign-off protocol, Release candidate tagging." },
   '2027-03-16': { d: ["ניתוח ביצועים תחת עומס 1,000 משתמשים.","Compound Indexes סופיים ב-Atlas.","זמני תגובה מתחת ל-80ms."], c: ["ביצועי Aggregations של דוחות.","Atlas Performance Advisor.","Connection Pooling אופטימלי."], t: "Atlas Performance Advisor, Profiler, Lean Queries, PoolSize tuning." },
   '2027-03-17': { d: ["בדיקת אבטחה וחדירות מקיפה.","Rate Limiting, מניעת NoSQL Injection ו-XSS.","הצפנה at rest & in transit."], c: ["express-rate-limit לפי IP ו-Token.","שגיאות גנריות ללא Stack Trace ב-Production.","Access Token ל-15 דקות, Refresh מאובטח."], t: "Rate Limiting, Mongo Sanitize, Helmet, OWASP Top 10 compliance." },
   '2027-03-18': { d: ["שרת ייצור רשמי (AWS / Render / DO).","Cluster ייצור ב-Atlas עם גיבויים אוטומטיים.","S3 Bucket ייצור עם הרשאות פרטיות."], c: ["PM2 / Docker להפעלה אוטומטית בקריסה.",".env.production עם מפתחות ייעודיים.","Continuous Backups ב-Atlas."], t: "Docker / Cloud Hosting, Atlas M10+ Production, S3 Production Bucket." },
-  '2027-03-21': { d: ["חיבור הדומיין הרשמי של המערכת.","SSL/TLS — HTTPS כפוי בכל הנתיבים.","CDN לאתר המנהלים + CORS קפדני."], c: ["רשומות DNS (A Records, CNAME).","ניתוב אוטומטי ל-HTTPS, ציון A+ ב-SSL Labs.","טעינת המסכים משרת הייצור החי."], t: "Cloudflare / Vercel Edge, SSL/TLS, DNS Configuration, Strict CORS." },
+  '2027-03-21': { d: ["חיבור הדומיין הרשמי של המערכת.","SSL/TLS - HTTPS כפוי בכל הנתיבים.","CDN לאתר המנהלים + CORS קפדני."], c: ["רשומות DNS (A Records, CNAME).","ניתוב אוטומטי ל-HTTPS, ציון A+ ב-SSL Labs.","טעינת המסכים משרת הייצור החי."], t: "Cloudflare / Vercel Edge, SSL/TLS, DNS Configuration, Strict CORS." },
   '2027-03-22': { d: ["גרסאות Release חתומות במפתחות ייצור.","AAB + APK לאנדרואיד.","העלאה ל-App Store Connect ול-Play Console."], c: ["Version Code 1.0.0 (Build 1).","צילומי מסך ותיאור בעברית לחנויות.","התקנת APK חתום מול שרת הייצור."], t: "Google Play Console, App Store Connect, Keystore Signing, Fastlane / EAS." },
   '2027-03-25': { d: ["Smoke Tests מלאים ב-Production החי.","סטטוס אישור האפליקציות בחנויות.","מחזור פעילות מלא: הרשמה -> דיווח -> אישור."], c: ["תקינות DB, שרתים ותעודות SSL.","Push חי עם מפתחות Production של Firebase.","ניקוי נתוני בדיקה לקראת ההדרכות."], t: "Production Smoke Testing, FCM Prod, CloudWatch / Logs monitoring." },
   '2027-03-28': { d: ["הדרכות מרוכזות לכלל צוותי שק\"ל.","סשן 1: עו\"ס (תיק, התראות, סודיות).","סשן 2: רכזי תרבות והוסטלים.","סשן 3: מנהל מכללה והנהלת חשבונות.","סרטון הדרכה ומדריך PDF למורים."], c: ["חלוקת שמות משתמש וסיסמאות.","תרגול מעשי של כל משתתף.","ערוץ תמיכה ישיר (קבוצה ייעודית / מייל)."], t: "User Training, Change Management, Quick Start Guides." },
-  '2027-03-29': { d: ["Soft Launch לקבוצת 50–100 סטודנטים ומורים.","הפצת קישור התקנה לקבוצת הפיילוט.","מעקב לוגים ופתרון שגיאות בזמן אמת."], c: ["קצב הרשמות ראשונות ללא תקלות.","חשבונית ראשונה ממורה בזמן אמת.","ניצול CPU & Memory תחת משתמשים אמיתיים."], t: "Staged Rollout, Real-time Log Streaming, Error Catching." },
-  '2027-03-30': { d: ["פתיחה מלאה לכלל 600–1,000 המשתמשים!","הודעת פתיחה חגיגית בכל ערוצי שק\"ל.","מעבר מלא של כל הפעילויות למערכת."], c: ["זמינות שרתים ו-APIs — 100%.","מעקב קצב התחברות סטודנטים ומורים.","חגיגת סיום פרויקט של 5 חודשי עבודה ממוקדים!"], t: "Full Production Traffic, Edge Routing, System Go-Live.", h: "יום השקה רשמי!" },
+  '2027-03-29': { d: ["Soft Launch לקבוצת 5-00 סטודנטים ומורים.","הפצת קישור התקנה לקבוצת הפיילוט.","מעקב לוגים ופתרון שגיאות בזמן אמת."], c: ["קצב הרשמות ראשונות ללא תקלות.","חשבונית ראשונה ממורה בזמן אמת.","ניצול CPU & Memory תחת משתמשים אמיתיים."], t: "Staged Rollout, Real-time Log Streaming, Error Catching." },
+  '2027-03-30': { d: ["פתיחה מלאה לכלל 60-,000 המשתמשים!","הודעת פתיחה חגיגית בכל ערוצי שק\"ל.","מעבר מלא של כל הפעילויות למערכת."], c: ["זמינות שרתים ו-APIs - 100%.","מעקב קצב התחברות סטודנטים ומורים.","חגיגת סיום פרויקט של 5 חודשי עבודה ממוקדים!"], t: "Full Production Traffic, Edge Routing, System Go-Live.", h: "יום השקה רשמי!" },
   '2027-03-31': { d: ["ליווי ותמיכה צמודים אחרי ההשקה.","ניטור ביצועים וקריסות (Crash-free > 99.5%).","סיוע בהתחברות ראשונית ואיפוס סיסמאות.","הפעלת הסכם ריטיינר ותחזוקה שוטפת."], c: ["לוחות ניטור (Sentry / Datadog / Atlas Alerts).","גיבויים אוטומטיים מתבצעים כמתוכנן.","מעבר לסטטוס 'מערכת יציבה בפעילות שוטפת'."], t: "Uptime Monitoring, Error Tracking (Sentry), Support & Maintenance Handover." }
 };
 
