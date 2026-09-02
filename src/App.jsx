@@ -154,6 +154,7 @@ function Modal({ iso, onClose }) {
   const entry = findEntry(y, m - 1, d) || ['infra', ''];
   const cat = CATS[entry[0]];
   const title = entry[1];
+  const techIsRtl = /[֐-׿]/.test(data.t);
 
   return (
     <div
@@ -200,7 +201,13 @@ function Modal({ iso, onClose }) {
             <div className="modal-section-title" style={{ color: cat.accent }}>
               <Icon name="code" />טכנולוגיות וקוד
             </div>
-            <div className="tech-box">{data.t}</div>
+            <div
+              className="tech-box"
+              dir={techIsRtl ? 'rtl' : 'ltr'}
+              style={{ textAlign: techIsRtl ? 'right' : 'left' }}
+            >
+              {data.t}
+            </div>
           </div>
           <div className="hours-badge">הקצאת זמן: {data.h || '8 שעות עבודה נטו'}</div>
         </div>
