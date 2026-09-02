@@ -1,0 +1,6 @@
+node_modules/
+dist/
+
+# local source material, not part of the site
+gemini-code-*.html
+schedule-full.html
