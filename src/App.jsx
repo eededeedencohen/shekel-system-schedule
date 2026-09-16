@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { ICONS, CATS, MONTHS, DETAILS, MILUIM_START, MILUIM_END } from './data.js';
+import SAFRA from './safra-schedule.json';
 
 const DAY_NAMES = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי'];
 const LEGEND_ORDER = [
@@ -12,6 +13,15 @@ const fmt = new Intl.DateTimeFormat('he-IL', {
 
 const pad = (n) => String(n).padStart(2, '0');
 const isoOf = (y, m, d) => `${y}-${pad(m + 1)}-${pad(d)}`;
+
+function readStoredProject() {
+  try {
+    const v = localStorage.getItem('schedule-project');
+    return v === 'safra' ? 'safra' : 'shekel';
+  } catch {
+    return 'shekel';
+  }
+}
 
 function Icon({ name }) {
   return (
@@ -79,7 +89,7 @@ function DayCell({ cell, onOpen }) {
     <div
       className={cls}
       style={{ background: cat.bg, borderColor: cat.border }}
-      onClick={cell.hasDetail ? () => onOpen(cell.iso) : undefined}
+      onClick={cell.hasDetail ? () => onOpen({ kind: 'shekel', iso: cell.iso }) : undefined}
     >
       {cell.isToday && <span className="today-pill">היום</span>}
       <div className="cell-top">
@@ -135,9 +145,96 @@ function MiluimBlock({ inMiluim }) {
   );
 }
 
-function Modal({ iso, onClose }) {
-  const data = DETAILS[iso];
+/* ---------------- Safra (25 numbered days, no dates) ---------------- */
 
+const SAFRA_STATUS_LABEL = { done: 'בוצע', next: 'הבא בתור', planned: 'מתוכנן' };
+
+function SafraDayCell({ day, onOpen }) {
+  const cat = SAFRA.cats[day.cat];
+  let cls = 'cell has-detail';
+  if (day.status === 'done') cls += ' past';
+  if (day.status === 'next') cls += ' today';
+
+  return (
+    <div
+      className={cls}
+      style={{ background: cat.bg, borderColor: cat.border }}
+      onClick={() => onOpen({ kind: 'safra', day })}
+    >
+      {day.status === 'next' && <span className="today-pill">הבא בתור</span>}
+      {day.status === 'done' && <span className="done-pill">בוצע</span>}
+      <div className="cell-top">
+        <span className="cell-date" style={{ color: cat.accent }}>יום {day.day}</span>
+        <span
+          className="cell-icon"
+          style={{
+            color: cat.accent,
+            background: 'rgba(255,255,255,0.65)',
+            border: `1px solid ${cat.border}`,
+          }}
+        >
+          <Icon name={cat.icon} />
+        </span>
+      </div>
+      <div className="cell-title">{day.title}</div>
+      <div className="cell-cat" style={{ color: cat.accent }}>{cat.label}</div>
+    </div>
+  );
+}
+
+function SafraView({ onOpen }) {
+  const { meta } = SAFRA;
+  const ag = meta.agreement;
+  const doneCount = SAFRA.days.filter((d) => d.status === 'done').length;
+
+  return (
+    <>
+      <div className="legend">
+        {Object.entries(SAFRA.cats).map(([key, c]) => (
+          <span
+            key={key}
+            className="legend-item"
+            style={{ background: c.bg, borderColor: c.border, color: c.accent }}
+          >
+            <Icon name={c.icon} />{c.label}
+          </span>
+        ))}
+      </div>
+
+      <section className="agreement-box">
+        <div className="agreement-icon"><Icon name="clipcheck" /></div>
+        <div>
+          <p>{ag.note}</p>
+          <div className="agreement-stats">
+            <span className="stat-chip">הוסכם: {ag.agreedDays} ימים ({ag.agreedHours} שעות)</span>
+            <span className="stat-chip">מתוכנן: {ag.plannedDays} ימים ({ag.plannedHours} שעות)</span>
+            <span className="stat-chip warn">חריגה: {ag.overrunDays} ימים מעבר להסכם</span>
+            <span className="stat-chip">יעד: עד {ag.agreedUntil}</span>
+          </div>
+        </div>
+      </section>
+
+      <section className="month-section">
+        <div className="month-head">
+          <span className="month-name">25 ימי פיתוח</span>
+          <span className="month-phase">
+            {doneCount} בוצעו · {SAFRA.days.length - doneCount} נותרו
+          </span>
+          <span className="month-sub">{meta.subtitle}</span>
+        </div>
+        <div className="calendar-grid">
+          {SAFRA.days.map((day) => (
+            <SafraDayCell key={day.day} day={day} onOpen={onOpen} />
+          ))}
+        </div>
+      </section>
+    </>
+  );
+}
+
+/* ---------------- Modal (shared by both schedules) ---------------- */
+
+function Modal({ cat, title, dateLabel, data, onClose }) {
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     const onKey = (e) => { if (e.key === 'Escape') onClose(); };
@@ -148,12 +245,6 @@ function Modal({ iso, onClose }) {
     };
   }, [onClose]);
 
-  if (!data) return null;
-
-  const [y, m, d] = iso.split('-').map(Number);
-  const entry = findEntry(y, m - 1, d) || ['infra', ''];
-  const cat = CATS[entry[0]];
-  const title = entry[1];
   const techIsRtl = /[֐-׿]/.test(data.t);
 
   return (
@@ -174,7 +265,7 @@ function Modal({ iso, onClose }) {
             <div className="modal-title-wrap">
               <h3>{title}</h3>
               <span className="modal-date-badge" style={{ color: cat.accent }}>
-                {fmt.format(new Date(y, m - 1, d))} · {cat.label}
+                {dateLabel}
               </span>
             </div>
           </div>
@@ -217,7 +308,8 @@ function Modal({ iso, onClose }) {
 }
 
 export default function App() {
-  const [selectedIso, setSelectedIso] = useState(null);
+  const [project, setProject] = useState(readStoredProject);
+  const [selected, setSelected] = useState(null);
   const [progressWidth, setProgressWidth] = useState(0);
 
   const now = useMemo(() => new Date(), []);
@@ -227,6 +319,14 @@ export default function App() {
   );
   const inMiluim = today >= MILUIM_START && today <= MILUIM_END;
 
+  const switchProject = (p) => {
+    setProject(p);
+    setSelected(null);
+    try { localStorage.setItem('schedule-project', p); } catch { /* private mode */ }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  /* ----- Shekel progress & status ----- */
   const { doneCount, totalCount } = useMemo(() => {
     let done = 0, total = 0;
     for (const mo of MONTHS) {
@@ -239,9 +339,21 @@ export default function App() {
     }
     return { doneCount: done, totalCount: total };
   }, [today]);
-  const pct = totalCount ? Math.round((doneCount / totalCount) * 100) : 0;
+
+  /* ----- Safra progress & status ----- */
+  const safraDone = SAFRA.days.filter((d) => d.status === 'done').length;
+  const safraNext = SAFRA.days.find((d) => d.status === 'next');
+
+  const pct = project === 'shekel'
+    ? (totalCount ? Math.round((doneCount / totalCount) * 100) : 0)
+    : Math.round((safraDone / SAFRA.days.length) * 100);
 
   const statusText = useMemo(() => {
+    if (project === 'safra') {
+      return safraNext
+        ? `הבא בתור: יום ${safraNext.day} · ${safraNext.title}`
+        : 'כל 25 הימים הושלמו!';
+    }
     if (inMiluim) return 'תקופת מילואים - המערכת קפואה בגרסה יציבה. חוזרים לפיתוח ב-1.2.2027.';
     if (today.getDay() > 4) return 'סוף שבוע - אין משימות מתוכננות להיום.';
     for (const mo of MONTHS) {
@@ -256,7 +368,7 @@ export default function App() {
     return today < new Date(2026, 8, 1)
       ? 'התוכנית מתחילה ב-1 בספטמבר 2026.'
       : 'התוכנית הסתיימה - המערכת באוויר.';
-  }, [today, inMiluim]);
+  }, [project, today, inMiluim, safraNext]);
 
   const currentSectionId = useMemo(() => {
     if (inMiluim) return 'sec-miluim';
@@ -269,7 +381,12 @@ export default function App() {
 
   useEffect(() => {
     const t1 = setTimeout(() => setProgressWidth(pct), 150);
-    const t2 = setTimeout(() => {
+    return () => clearTimeout(t1);
+  }, [pct]);
+
+  useEffect(() => {
+    if (project !== 'shekel') return;
+    const t = setTimeout(() => {
       const todayCell = document.querySelector('.cell.today');
       if (todayCell) {
         todayCell.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -278,13 +395,41 @@ export default function App() {
         if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     }, 300);
-    return () => { clearTimeout(t1); clearTimeout(t2); };
-  }, [pct, currentSectionId]);
+    return () => clearTimeout(t);
+  }, [project, currentSectionId]);
 
   const scrollTo = (id) => {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
+
+  /* ----- Modal payload ----- */
+  let modalProps = null;
+  if (selected?.kind === 'shekel') {
+    const data = DETAILS[selected.iso];
+    if (data) {
+      const [y, m, d] = selected.iso.split('-').map(Number);
+      const entry = findEntry(y, m - 1, d) || ['infra', ''];
+      const cat = CATS[entry[0]];
+      modalProps = {
+        cat,
+        title: entry[1],
+        dateLabel: `${fmt.format(new Date(y, m - 1, d))} · ${cat.label}`,
+        data,
+      };
+    }
+  } else if (selected?.kind === 'safra') {
+    const day = selected.day;
+    const cat = SAFRA.cats[day.cat];
+    modalProps = {
+      cat,
+      title: day.title,
+      dateLabel: `יום ${day.day} מתוך ${SAFRA.days.length} · ${SAFRA_STATUS_LABEL[day.status]} · ${cat.label}`,
+      data: { d: day.d, c: day.c, t: day.t, h: day.h },
+    };
+  }
+
+  const isShekel = project === 'shekel';
 
   return (
     <>
@@ -292,10 +437,19 @@ export default function App() {
         <div className="container">
           <div className="header-inner">
             <div>
-              <h1>מערכת ניהול שק"ל · תוכנית עבודה מלאה</h1>
-              <div className="header-sub">
-                ספטמבר 2026 - מרץ 2027 · אפיון ← פיתוח Web ← מילואים ← מובייל ← השקה
-              </div>
+              {isShekel ? (
+                <>
+                  <h1>מערכת ניהול שק"ל · תוכנית עבודה מלאה</h1>
+                  <div className="header-sub">
+                    ספטמבר 2026 - מרץ 2027 · אפיון ← פיתוח Web ← מילואים ← מובייל ← השקה
+                  </div>
+                </>
+              ) : (
+                <>
+                  <h1>מכללת ספרא · תוכנית 25 ימי פיתוח</h1>
+                  <div className="header-sub">{SAFRA.meta.subtitle}</div>
+                </>
+              )}
             </div>
             <div className="today-box">
               <div className="today-date">{fmt.format(now)}</div>
@@ -304,7 +458,11 @@ export default function App() {
           </div>
           <div className="progress-wrap">
             <div className="progress-labels">
-              <span>{doneCount} מתוך {totalCount} ימי עבודה הושלמו</span>
+              <span>
+                {isShekel
+                  ? `${doneCount} מתוך ${totalCount} ימי עבודה הושלמו`
+                  : `${safraDone} מתוך ${SAFRA.days.length} ימי פיתוח בוצעו`}
+              </span>
               <span>{pct}%</span>
             </div>
             <div className="progress-track">
@@ -316,7 +474,20 @@ export default function App() {
 
       <nav className="month-nav">
         <div className="container month-nav-inner">
-          {MONTHS.map((mo) => {
+          <button
+            className={`project-pill${isShekel ? ' current' : ''}`}
+            onClick={() => switchProject('shekel')}
+          >
+            שק"ל
+          </button>
+          <button
+            className={`project-pill${!isShekel ? ' current' : ''}`}
+            onClick={() => switchProject('safra')}
+          >
+            ספרא
+          </button>
+          {isShekel && <span className="nav-sep" />}
+          {isShekel && MONTHS.map((mo) => {
             if (mo.miluim) {
               return (
                 <button
@@ -343,29 +514,34 @@ export default function App() {
       </nav>
 
       <div className="container">
-        <div className="legend">
-          {LEGEND_ORDER.map((key) => {
-            const c = CATS[key];
-            return (
-              <span
-                key={key}
-                className="legend-item"
-                style={{ background: c.bg, borderColor: c.border, color: c.accent }}
-              >
-                <Icon name={c.icon} />{c.label}
-              </span>
-            );
-          })}
-        </div>
-
-        {MONTHS.map((mo) =>
-          mo.miluim
-            ? <MiluimBlock key="miluim" inMiluim={inMiluim} />
-            : <MonthSection key={`${mo.y}-${mo.m}`} mo={mo} today={today} onOpen={setSelectedIso} />
+        {isShekel ? (
+          <>
+            <div className="legend">
+              {LEGEND_ORDER.map((key) => {
+                const c = CATS[key];
+                return (
+                  <span
+                    key={key}
+                    className="legend-item"
+                    style={{ background: c.bg, borderColor: c.border, color: c.accent }}
+                  >
+                    <Icon name={c.icon} />{c.label}
+                  </span>
+                );
+              })}
+            </div>
+            {MONTHS.map((mo) =>
+              mo.miluim
+                ? <MiluimBlock key="miluim" inMiluim={inMiluim} />
+                : <MonthSection key={`${mo.y}-${mo.m}`} mo={mo} today={today} onOpen={setSelected} />
+            )}
+          </>
+        ) : (
+          <SafraView onOpen={setSelected} />
         )}
       </div>
 
-      {selectedIso && <Modal iso={selectedIso} onClose={() => setSelectedIso(null)} />}
+      {modalProps && <Modal {...modalProps} onClose={() => setSelected(null)} />}
     </>
   );
 }
