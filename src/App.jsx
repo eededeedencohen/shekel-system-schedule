@@ -292,7 +292,7 @@ function SafraView({ onOpen }) {
             <span className="stat-chip">הוסכם: {ag.agreedDays} ימים ({ag.agreedHours} שעות)</span>
             <span className="stat-chip">מתוכנן: {ag.plannedDays} ימים ({ag.plannedHours} שעות)</span>
             <span className="stat-chip warn">חריגה: {ag.overrunDays} ימים מעבר להסכם</span>
-            <span className="stat-chip">מכסת אתר: {SITE.total} שעות בנפרד</span>
+            <span className="stat-chip">מערכת: {ag.systemDays} ימים · אתר: {ag.siteDays} ימים ({SITE.total} שעות)</span>
             <span className="stat-chip">יעד: עד {ag.agreedUntil}</span>
           </div>
         </div>
@@ -301,7 +301,7 @@ function SafraView({ onOpen }) {
       <div className="safra-layout">
         <section className="month-section">
           <div className="month-head">
-            <span className="month-name">{SAFRA.days.length} ימי פיתוח</span>
+            <span className="month-name">{SAFRA.days.length} ימי פיתוח המערכת</span>
             <span className="month-phase">
               {doneCount} בוצעו · {SAFRA.days.length - doneCount} נותרו
             </span>
@@ -446,7 +446,7 @@ export default function App() {
     if (project === 'safra') {
       return safraNext
         ? `הבא בתור: יום ${safraNext.day} · ${safraNext.title}`
-        : `כל ${SAFRA.days.length} הימים הושלמו!`;
+        : `כל ${SAFRA.days.length} ימי המערכת הושלמו!`;
     }
     if (inMiluim) return 'תקופת מילואים - המערכת קפואה בגרסה יציבה. חוזרים לפיתוח ב-1.2.2027.';
     if (today.getDay() > 4) return 'סוף שבוע - אין משימות מתוכננות להיום.';
@@ -557,7 +557,7 @@ export default function App() {
                 </>
               ) : (
                 <>
-                  <h1>מכללת ספרא · תוכנית {SAFRA.days.length} ימי פיתוח</h1>
+                  <h1>מכללת ספרא · תוכנית {SAFRA.meta.agreement.plannedDays} ימי פיתוח</h1>
                   <div className="header-sub">{SAFRA.meta.subtitle}</div>
                 </>
               )}
@@ -572,7 +572,7 @@ export default function App() {
               <span>
                 {isShekel
                   ? `${doneCount} מתוך ${totalCount} ימי עבודה הושלמו`
-                  : `${safraDone} מתוך ${SAFRA.days.length} ימי פיתוח בוצעו`}
+                  : `${safraDone} מתוך ${SAFRA.days.length} ימי פיתוח המערכת בוצעו`}
               </span>
               <span>{pct}%</span>
             </div>
