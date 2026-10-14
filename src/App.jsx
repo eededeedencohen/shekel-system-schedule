@@ -182,6 +182,89 @@ function SafraDayCell({ day, onOpen }) {
   );
 }
 
+const SITE = SAFRA.siteHours;
+const siteDateFmt = new Intl.DateTimeFormat('he-IL', { day: 'numeric', month: 'long', year: 'numeric' });
+const fmtHours = (h) => String(Math.round(h * 100) / 100);
+const siteUsedHours = () => SITE.entries.reduce((s, e) => s + e.hours, 0);
+
+function parseIso(iso) {
+  const [y, m, d] = iso.split('-').map(Number);
+  return new Date(y, m - 1, d);
+}
+
+function SiteHoursPanel({ onOpen }) {
+  const cat = SAFRA.cats[SITE.cat];
+  const used = siteUsedHours();
+  const left = Math.max(SITE.total - used, 0);
+  const pct = Math.min(100, Math.round((used / SITE.total) * 100));
+  const entries = [...SITE.entries].sort((a, b) => (a.date < b.date ? 1 : -1));
+
+  return (
+    <aside
+      className="site-panel"
+      style={{ borderColor: cat.border }}
+      aria-label="מכסת שעות לאתר מכללת ספרא"
+    >
+      <div className="site-panel-head">
+        <span
+          className="site-panel-icon"
+          style={{ color: cat.accent, background: cat.bg, border: `1px solid ${cat.border}` }}
+        >
+          <Icon name={cat.icon} />
+        </span>
+        <div>
+          <div className="site-panel-title">{SITE.title}</div>
+          <div className="site-panel-sub">{SITE.subtitle}</div>
+        </div>
+      </div>
+
+      <div className="site-stats">
+        <div className="site-stat">
+          <span className="site-stat-num">{fmtHours(SITE.total)}</span>
+          <span className="site-stat-label">שעות במכסה</span>
+        </div>
+        <div className="site-stat">
+          <span className="site-stat-num" style={{ color: cat.accent }}>{fmtHours(used)}</span>
+          <span className="site-stat-label">נוצלו</span>
+        </div>
+        <div className="site-stat">
+          <span className="site-stat-num">{fmtHours(left)}</span>
+          <span className="site-stat-label">נותרו</span>
+        </div>
+      </div>
+      <div className="site-track">
+        <div className="site-fill" style={{ width: `${pct}%`, background: cat.accent }} />
+      </div>
+
+      <div className="site-history-title">היסטוריית פעולות</div>
+      {entries.length === 0 ? (
+        <div className="site-empty">עדיין לא בוצעו פעולות.</div>
+      ) : (
+        <ul className="site-history">
+          {entries.map((e) => (
+            <li key={`${e.date}-${e.title}`}>
+              <button
+                type="button"
+                className="site-entry"
+                style={{ background: cat.bg, borderColor: cat.border }}
+                onClick={() => onOpen({ kind: 'site', entry: e })}
+              >
+                <div className="site-entry-top">
+                  <span className="site-entry-date">{siteDateFmt.format(parseIso(e.date))}</span>
+                  <span className="site-entry-hours" style={{ color: cat.accent, borderColor: cat.border }}>
+                    {fmtHours(e.hours)} שע׳
+                  </span>
+                </div>
+                <div className="site-entry-title">{e.title}</div>
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </aside>
+  );
+}
+
 function SafraView({ onOpen }) {
   const { meta } = SAFRA;
   const ag = meta.agreement;
@@ -209,25 +292,30 @@ function SafraView({ onOpen }) {
             <span className="stat-chip">הוסכם: {ag.agreedDays} ימים ({ag.agreedHours} שעות)</span>
             <span className="stat-chip">מתוכנן: {ag.plannedDays} ימים ({ag.plannedHours} שעות)</span>
             <span className="stat-chip warn">חריגה: {ag.overrunDays} ימים מעבר להסכם</span>
+            <span className="stat-chip">מכסת אתר: {SITE.total} שעות בנפרד</span>
             <span className="stat-chip">יעד: עד {ag.agreedUntil}</span>
           </div>
         </div>
       </section>
 
-      <section className="month-section">
-        <div className="month-head">
-          <span className="month-name">25 ימי פיתוח</span>
-          <span className="month-phase">
-            {doneCount} בוצעו · {SAFRA.days.length - doneCount} נותרו
-          </span>
-          <span className="month-sub">{meta.subtitle}</span>
-        </div>
-        <div className="calendar-grid">
-          {SAFRA.days.map((day) => (
-            <SafraDayCell key={day.day} day={day} onOpen={onOpen} />
-          ))}
-        </div>
-      </section>
+      <div className="safra-layout">
+        <section className="month-section">
+          <div className="month-head">
+            <span className="month-name">{SAFRA.days.length} ימי פיתוח</span>
+            <span className="month-phase">
+              {doneCount} בוצעו · {SAFRA.days.length - doneCount} נותרו
+            </span>
+            <span className="month-sub">{meta.subtitle}</span>
+          </div>
+          <div className="calendar-grid">
+            {SAFRA.days.map((day) => (
+              <SafraDayCell key={day.day} day={day} onOpen={onOpen} />
+            ))}
+          </div>
+        </section>
+
+        <SiteHoursPanel onOpen={onOpen} />
+      </div>
     </>
   );
 }
@@ -245,7 +333,9 @@ function Modal({ cat, title, dateLabel, data, onClose }) {
     };
   }, [onClose]);
 
-  const techIsRtl = /[֐-׿]/.test(data.t);
+  const techIsRtl = /[֐-׿]/.test(data.t || '');
+  const hasChecklist = Array.isArray(data.c) && data.c.length > 0;
+  const hasTech = !!data.t;
 
   return (
     <div
@@ -274,33 +364,37 @@ function Modal({ cat, title, dateLabel, data, onClose }) {
         <div className="modal-body">
           <div className="modal-section">
             <div className="modal-section-title" style={{ color: cat.accent }}>
-              <Icon name="target" />תוצרי העבודה הנדרשים
+              <Icon name="target" />{data.dTitle || 'תוצרי העבודה הנדרשים'}
             </div>
             <ul className="modal-list" style={{ color: cat.accent }}>
               {data.d.map((item, i) => <li key={i}>{item}</li>)}
             </ul>
           </div>
-          <div className="modal-section">
-            <div className="modal-section-title" style={{ color: cat.accent }}>
-              <Icon name="list" />צ'ק-ליסט לביצוע
+          {hasChecklist && (
+            <div className="modal-section">
+              <div className="modal-section-title" style={{ color: cat.accent }}>
+                <Icon name="list" />צ'ק-ליסט לביצוע
+              </div>
+              <ul className="modal-list" style={{ color: cat.accent }}>
+                {data.c.map((item, i) => <li key={i}>{item}</li>)}
+              </ul>
             </div>
-            <ul className="modal-list" style={{ color: cat.accent }}>
-              {data.c.map((item, i) => <li key={i}>{item}</li>)}
-            </ul>
-          </div>
-          <div className="modal-section">
-            <div className="modal-section-title" style={{ color: cat.accent }}>
-              <Icon name="code" />טכנולוגיות וקוד
+          )}
+          {hasTech && (
+            <div className="modal-section">
+              <div className="modal-section-title" style={{ color: cat.accent }}>
+                <Icon name="code" />טכנולוגיות וקוד
+              </div>
+              <div
+                className="tech-box"
+                dir={techIsRtl ? 'rtl' : 'ltr'}
+                style={{ textAlign: techIsRtl ? 'right' : 'left' }}
+              >
+                {data.t}
+              </div>
             </div>
-            <div
-              className="tech-box"
-              dir={techIsRtl ? 'rtl' : 'ltr'}
-              style={{ textAlign: techIsRtl ? 'right' : 'left' }}
-            >
-              {data.t}
-            </div>
-          </div>
-          <div className="hours-badge">הקצאת זמן: {data.h || '8 שעות עבודה נטו'}</div>
+          )}
+          <div className="hours-badge">{data.hLabel || 'הקצאת זמן'}: {data.h || '8 שעות עבודה נטו'}</div>
         </div>
       </div>
     </div>
@@ -352,7 +446,7 @@ export default function App() {
     if (project === 'safra') {
       return safraNext
         ? `הבא בתור: יום ${safraNext.day} · ${safraNext.title}`
-        : 'כל 25 הימים הושלמו!';
+        : `כל ${SAFRA.days.length} הימים הושלמו!`;
     }
     if (inMiluim) return 'תקופת מילואים - המערכת קפואה בגרסה יציבה. חוזרים לפיתוח ב-1.2.2027.';
     if (today.getDay() > 4) return 'סוף שבוע - אין משימות מתוכננות להיום.';
@@ -427,6 +521,23 @@ export default function App() {
       dateLabel: `יום ${day.day} מתוך ${SAFRA.days.length} · ${SAFRA_STATUS_LABEL[day.status]} · ${cat.label}`,
       data: { d: day.d, c: day.c, t: day.t, h: day.h },
     };
+  } else if (selected?.kind === 'site') {
+    const entry = selected.entry;
+    const cat = SAFRA.cats[SITE.cat];
+    const used = siteUsedHours();
+    modalProps = {
+      cat,
+      title: entry.title,
+      dateLabel: `${siteDateFmt.format(parseIso(entry.date))} · ${SITE.title} · מכסת שעות`,
+      data: {
+        dTitle: 'מה נעשה',
+        d: entry.d,
+        c: entry.c,
+        t: entry.t,
+        hLabel: 'זמן שנוצל',
+        h: `${fmtHours(entry.hours)} שעות (סה"כ נוצלו ${fmtHours(used)} מתוך ${SITE.total}, נותרו ${fmtHours(SITE.total - used)})`,
+      },
+    };
   }
 
   const isShekel = project === 'shekel';
@@ -446,7 +557,7 @@ export default function App() {
                 </>
               ) : (
                 <>
-                  <h1>מכללת ספרא · תוכנית 25 ימי פיתוח</h1>
+                  <h1>מכללת ספרא · תוכנית {SAFRA.days.length} ימי פיתוח</h1>
                   <div className="header-sub">{SAFRA.meta.subtitle}</div>
                 </>
               )}
